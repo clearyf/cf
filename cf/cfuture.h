@@ -749,6 +749,8 @@ public:
     : state_(std::move(other.state_)) {}
 
   promise& operator = (promise&& other) {
+    if (state_)
+      state_->abandon();
     state_ = std::move(other.state_);
     return *this;
   }

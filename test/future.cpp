@@ -160,6 +160,19 @@ TEST_CASE("Future") {
       }
     } // set value
 
+    SECTION("Assign promise") {
+      cf::promise<int> p1;
+      auto f1 = p1.get_future();
+
+      p1 = cf::promise<int>();
+      SECTION("Assigning to promise sets previous future") {
+        REQUIRE(f1.valid());
+      }
+      SECTION("Assigning to promise abandons previous future") {
+        REQUIRE_THROWS(f1.get());
+      }
+    } // assign promisbe
+
     SECTION("Set exception") {
       promise.set_exception(std::make_exception_ptr(std::logic_error("test")));
 
